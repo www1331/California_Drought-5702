@@ -6,11 +6,11 @@ execute:
   echo: true
 
 book:
-  title: "NASA"
+  title: "California_Drought"
   author:
     - Qisen Wang (qw2411)
-    - AUTHOR2 (UNI2)
-  repo-url: https://github.com/www1331/NASA-5702
+    - Baiyu Chen (bc3092)
+  repo-url: https://github.com/www1331/California_Drought-5702
   date: today
   page-footer:
     right: |

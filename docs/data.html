@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>NASA - 2&nbsp; Data</title>
+<title>California_Drought - 2&nbsp; Data</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -89,9 +89,9 @@ ul.task-list li input[type="checkbox"] {
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
-      <a href="./">NASA</a> 
+      <a href="./">California_Drought</a> 
         <div class="sidebar-tools-main">
-    <a href="https://github.com/www1331/NASA-5702" rel="" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+    <a href="https://github.com/www1331/California_Drought-5702" rel="" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
 </div>
     </div>
       </div>
@@ -145,7 +145,7 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#description" id="toc-description" class="nav-link active" data-scroll-target="#description"><span class="header-section-number">2.1</span> Description</a></li>
   <li><a href="#missing-value-analysis" id="toc-missing-value-analysis" class="nav-link" data-scroll-target="#missing-value-analysis"><span class="header-section-number">2.2</span> Missing value analysis</a></li>
   </ul>
-<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/www1331/NASA-5702/edit/main/data.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/www1331/NASA-5702/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
+<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/www1331/California_Drought-5702/edit/main/data.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/www1331/California_Drought-5702/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -167,8 +167,13 @@ ul.task-list li input[type="checkbox"] {
 
 </header>
 
+<p>Our project will temporarily involve three data sources for the time being.</p>
+<p>The first dataset is a csv file obtained by Qisen Wang from the website U.S. Drought Monitor, which contains specific drought severity levels for California from 2013 to 2023. This file contains multiple dimensions, and in addition to time and region, the dataset uses six intervals (None, D0-D4) to categorize drought levels. We plan to read the csv file directly in RStudio. Data source: https://droughtmonitor.unl.edu/DmData/DataDownload/ComprehensiveStatistics.aspx</p>
+<p>The second dataset is a csv file obtained by Qisen Wang at the website U.S. Drought Monitor, which contains the number of weeks (consecutive weeks or total weeks) that each region of California has been in some degree of drought from 2013-2023. This file contains multiple dimensions; in addition to time and region, the dataset records the start and end dates of each drought period with StartDate and EndDate, and the number of weeks the drought lasted with ConsecutiveWeeks. We plan to read the csv file directly in RStudio. Data source: https://droughtmonitor.unl.edu/DmData/DataDownload/WeeksInDrought.aspx</p>
+<p>The third dataset is a csv file obtained by Qisen Wang at the website National Centers for Environmental Information, which contains data on natural hazards, including droughts, experienced by California from 1980-2023. This file contains several dimensions, in addition to the name, time, and type of natural disaster, the dataset records the economic damage caused by the disaster in Total CPI-Adjusted Cost and the number of deaths in Deaths. We plan to read the csv file directly in RStudio. Data source: https://www.ncei.noaa.gov/access/billions/mapping</p>
 <section id="description" class="level2" data-number="2.1">
 <h2 data-number="2.1" class="anchored" data-anchor-id="description"><span class="header-section-number">2.1</span> Description</h2>
+<p>First of all we are interested in the specifics of the California drought, we want to know over what period of time the drought conditions have actually gotten severe and what the trend in the drought conditions has been, and that trend and that detail we can get from the first dataset. Secondly we are also interested in the drought conditions in individual counties within California, we would like to know which counties have the most severe drought conditions and if there is any specific link between drought duration and geographic location, and this information can be obtained from the second dataset. After analyzing the specifics of the drought, we wanted to learn more about the impacts caused by the drought. We plan to extract drought-related data from the overall natural disaster data and analyze the economic losses and tens of thousands of people caused by the drought, which is something the third dataset can help us with.</p>
 </section>
 <section id="missing-value-analysis" class="level2" data-number="2.2">
 <h2 data-number="2.2" class="anchored" data-anchor-id="missing-value-analysis"><span class="header-section-number">2.2</span> Missing value analysis</h2>
