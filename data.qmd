@@ -16,7 +16,7 @@ First of all we are interested in the specifics of the California drought, we wa
 
 To analyze missing values, we draw some heatmaps to visualize the distribution of NA in our data.
 
-The number of ground elements in each dataset is pretty large, so we group some data items by the variable of interest before drawing.
+The number of ground elements in each dataset is pretty large, so we group some data items by variables of interest before drawing.
 
 We divide other variables into two categories: numeric and non-numeric varibles, and analyze them respectively.
 
