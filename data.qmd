@@ -19,7 +19,7 @@ First of all we are interested in the specifics of the California drought, we wa
 ## Missing value analysis
 
 ![Graph 1](WechatIMG70.png)
-![Graph 2](WechatIMG70.png)
+![Graph 2](WechatIMG71.png)
 
 
 
