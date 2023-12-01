@@ -11,13 +11,13 @@
     "href": "data.html#description",
     "title": "2  Data",
     "section": "2.1 Description",
-    "text": "2.1 Description\nFirst of all we are interested in the specifics of the California drought, we want to know over what period of time the drought conditions have actually gotten severe and what the trend in the drought conditions has been, and that trend and that detail we can get from the first dataset. Secondly we are also interested in the drought conditions in individual counties within California, we would like to know which counties have the most severe drought conditions and if there is any specific link between drought duration and geographic location, and this information can be obtained from the second dataset. After analyzing the specifics of the drought, we wanted to learn more about the impacts caused by the drought. We plan to extract drought-related data from the overall natural disaster data and analyze the economic losses and tens of thousands of people caused by the drought, which is something the third dataset can help us with."
+    "text": "2.1 Description\nFirst of all we are interested in the specifics of the California drought, we want to know over what period of time the drought conditions have actually gotten severe and what the trend in the drought conditions has been, and that trend and that detail we can get from the first dataset. Secondly we are also interested in the drought conditions in individual counties within California, we would like to know which counties have the most severe drought conditions and if there is any specific link between drought duration and geographic location, and this information can be obtained from the second dataset. After analyzing the specifics of the drought, we wanted to learn more about the impacts caused by the drought. We plan to extract drought-related data from the overall natural disaster data and analyze the economic losses and tens of thousands of people caused by the drought, which is something the third dataset can help us with.\n111"
   },
   {
     "objectID": "data.html#missing-value-analysis",
     "href": "data.html#missing-value-analysis",
     "title": "2  Data",
     "section": "2.2 Missing value analysis",
-    "text": "2.2 Missing value analysis"
+    "text": "2.2 Missing value analysis\n\n\n\nSnow’s Other Map\n\n\n\n\nCode\nknitr::include_graphics(\"WechatIMG70.png\")\n\n\n\n\n\nCode\nknitr::include_graphics(\"WechatIMG71.png\")"
   }
 ]
