@@ -18,9 +18,9 @@ To analyze missing values, we draw some heatmaps to visualize the distribution o
 
 The number of ground elements in each dataset is pretty large, so we group some data items by variables of interest before drawing.
 
-We divide other variables into two categories: numeric and non-numeric varibles, and analyze them respectively.
+We divide variables into two categories: numeric and non-numeric varibles, and analyze them respectively.
 
-For numeric variable, we compute the mean value or sum of these groups and standardize on the dataset.
+For numeric variables, we compute the mean values or sum of these groups and then standardize across the dataset.
 
 Other variables are treated as non-numeric, and we just check whether there are missing values of these variables in groups.
 
