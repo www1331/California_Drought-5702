@@ -24,8 +24,12 @@ For numeric variables, we compute the mean values or sum of these groups and the
 
 Other variables are treated as non-numeric, and we just check whether there are missing values of these variables in groups.
 
-![Graph 1](WechatIMG70.png) ![Graph 2](WechatIMG71.png)
+![Missingness in non-numerical variables.](WechatIMG70.png) ![Missingness in numerical variable.](WechatIMG71.png)
 
 Missingness in numeric and non-numeric variables of 3 dataset is shown in two pictures above.
 
 Apparently, no missing value has been found in our data (otherwise there will be some grey blocks in these heatmaps).
+
+![Missing patterns.](images/missingness_3.png)
+
+It can be also verified by using `redav::plot_missing()`, which shows that our data is complete. (The aggregated missing patterns in 3 dataset are same and we just show one of them)
