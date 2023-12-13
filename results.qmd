@@ -1,1 +1,119 @@
 # Results
+##1
+```{r}
+library(tidyverse)
+library(lubridate)
+
+data <- read.csv("dm_export_CA.csv")
+data$StartDate <- as.Date(data$StartDate)
+data$EndDate <- as.Date(data$EndDate)
+
+ggplot(data, aes(x = ConsecutiveWeeks)) +
+  geom_histogram(bins = 30, fill = "blue", color = "black") +
+  theme_minimal() +
+  labs(title = "Distribution of Consecutive Weeks", x = "Consecutive Weeks", y = "Frequency")
+
+county_data <- data %>%
+               group_by(County) %>%
+               summarise(TotalWeeks = sum(ConsecutiveWeeks)) %>%
+               arrange(desc(TotalWeeks))
+ggplot(county_data, aes(x = reorder(County, TotalWeeks), y = TotalWeeks)) +
+  geom_bar(stat = "identity", fill = "coral") +
+  coord_flip() +
+  labs(title = "Total Consecutive Weeks by County", x = "County", y = "Total Consecutive Weeks") +
+  theme_minimal()
+
+data$Year <- year(data$StartDate)
+yearly_data <- data %>%
+               group_by(Year) %>%
+               summarise(TotalWeeks = sum(ConsecutiveWeeks))
+ggplot(yearly_data, aes(x = Year, y = TotalWeeks)) +
+  geom_line(group = 1, color = "green") +
+  labs(title = "Total Consecutive Weeks Over Time", x = "Year", y = "Total Consecutive Weeks") +
+  theme_minimal()
+```
+```{r}
+data <- read.csv("events-CA.csv", skip = 1)  # Adjust 'skip' as needed
+names(data) <- c("Name", "DisasterType", "BeginDate", "EndDate", "CostMillions", "Deaths")
+data$BeginDate <- ymd(data$BeginDate)
+data$EndDate <- ymd(data$EndDate)
+
+ggplot(data, aes(x = DisasterType)) +
+  geom_bar(fill = "blue") +
+  theme_minimal() +
+  labs(title = "Frequency of Disaster Types", x = "Disaster Type", y = "Frequency")
+
+disaster_costs <- data %>%
+                  group_by(DisasterType) %>%
+                  summarise(TotalCost = sum(CostMillions, na.rm = TRUE)) %>%
+                  arrange(desc(TotalCost))
+ggplot(disaster_costs, aes(x = reorder(DisasterType, TotalCost), y = TotalCost)) +
+  geom_bar(stat = "identity", fill = "turquoise") +
+  coord_flip() +
+  labs(title = "Comparison of Costs by Disaster Type", x = "Disaster Type", y = "Total Cost (Millions of Dollars)") +
+  theme_minimal()
+
+data$Category <- ifelse(data$DisasterType == "Drought", "Drought", "Other")
+category_costs <- data %>%
+                  group_by(Category) %>%
+                  summarise(TotalCost = sum(CostMillions, na.rm = TRUE))
+ggplot(category_costs, aes(x = Category, y = TotalCost, fill = Category)) +
+  geom_bar(stat = "identity") +
+  labs(title = "Comparison of Costs: Drought vs Other Disasters", x = "Category", y = "Total Cost (Millions of Dollars)") +
+  theme_minimal()
+```
+```{r}
+data <- read.csv("USDM-California.csv")
+data$MapDate <- ymd(data$MapDate)
+
+
+
+data$drought_percentage = 100 - data$None
+ggplot(data, aes(x = MapDate, y = drought_percentage)) +
+  geom_line(color = "red") +
+  labs(title = "Trend of the Percentage of California Experiencing Drought",
+       x = "Date",
+       y = "Drought Percentage (%)") +
+  theme_minimal()
+
+
+data$Year = year(data$MapDate)
+data$Week = week(data$MapDate)
+
+ggplot(data, aes(x = Year, y = Week, fill = drought_percentage)) +
+  geom_tile() +
+  scale_fill_gradient(low = "white", high = "brown") +
+  labs(title = "Heatmap of Drought Severity in California by Week and Year",
+       x = "Year",
+       y = "Week",
+       fill = "Drought Severity (%)")
+
+data_long <- pivot_longer(data, cols = c(None, D0, D1, D2, D3, D4), names_to = "DroughtLevel", values_to = "Percentage")
+ggplot(data_long, aes(x = MapDate, y = Percentage, fill = DroughtLevel)) +
+  geom_area(position = 'stack') +
+  labs(title = "Stacked Area Plot of Drought Severity Over Time",
+       x = "Date",
+       y = "Percentage (%)")
+
+data <- read.csv("USDM-California.csv")
+data$MapDate <- as.Date(as.character(data$MapDate), "%Y%m%d")
+data$Month <- format(data$MapDate, "%m")
+data$Year <- format(data$MapDate, "%Y")
+data$highest_drought_level <- apply(data[, c("D0", "D1", "D2", "D3", "D4")], 1, function(x) {
+  if (x["D4"] > 0) return("D4")
+  else if (x["D3"] > 0) return("D3")
+  else if (x["D2"] > 0) return("D2")
+  else if (x["D1"] > 0) return("D1")
+  else if (x["D0"] > 0) return("D0")
+  else return("None")
+})
+ggplot(data, aes(x = Month, y = Year, fill = highest_drought_level)) + 
+  geom_tile() + 
+  scale_fill_manual(values = c("None" = "green", "D0" = "yellow", "D1" = "orange", "D2" = "red", "D3" = "brown", "D4" = "purple")) +
+  labs(title = "Heatmap of Highest Monthly Drought Severity in California",
+       x = "Month",
+       y = "Year",
+       fill = "Drought Level") +
+  theme_minimal()
+```
+
