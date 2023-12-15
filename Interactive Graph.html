@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Interactive Graph</title>
+    <script src="https://d3js.org/d3.v7.js"></script>
+    <script src="https://d3js.org/d3-array.v1.min.js"></script>
+    <script src="https://d3js.org/d3-geo.v1.min.js"></script>
+    <style>
+
+      body {
+        font-family: "Helvetica Neue", Helvetica, sans-serif;
+        font-size: 14px;
+        color: #333;
+      }
+
+      #content .info {
+        height: 20px;
+      }
+
+      #content .map path {
+        fill: #aaa;
+        stroke: #fff;
+      }
+
+      #content .bounding-box rect {
+        fill: none;
+        stroke: #333;
+        stroke-dasharray: 2,1;
+      }
+
+      #content .centroid {
+        display: none;
+      }
+
+      #content .centroid circle {
+        fill: red;
+      }
+
+      p,
+      label {
+        font:
+          1rem 'Fira Sans',
+          sans-serif;
+      }
+
+      input[type=range] {
+        width: 90%;
+        margin: 0.4rem;
+      }
+
+      #pie-chart .legend rect {
+       fill:white;
+       stroke:black;
+       opacity:0.8;
+      }
+
+    </style>
+  </head>
+
+  <body>
+
+    <p>
+      Date: <span id="date-val"></span>
+      <div>
+        <input type="range" id="date" name="date" step="1">
+      </div>
+    </p>
+
+    <h2 style="font-family: Palatino;"> Counties affected by drought of intensity D0. </h2>
+
+    <div id="content">
+      <div class="info">Hover over a county</div>
+      <svg width="600px" height="500px">
+        <g class="map"></g>
+        <g class="bounding-box"><rect></rect></g>
+        <g class="centroid"><circle r="4"></circle></g>
+      </svg>
+    </div>
+
+    <h2 style="font-family: Palatino;"> Proportion of area affected by different degrees of drought. </h2>
+
+    <div id="pie-chart">
+    </div>
+
+
+
+    <script>
+
+    // variables **********************************
+
+    var start_date  //define as global variable
+
+    // setting about map
+    let projection = d3.geoMercator()
+    	.scale(2000)  // Scale factor of the projection
+    	.translate([350, 250])  // Pixel [x,y] location of the projection center
+    	.center([-119.4, 36.8]);  // Projection center [longitude, latitude]
+
+    let geoGenerator = d3.geoPath()
+    	.projection(projection);
+
+    let mark_D0 = "#CC3366"
+
+    let color_1 = d3.scaleOrdinal()
+      .domain(["D0", "None"])
+      .range([mark_D0, "#aaa"])
+
+    // setting about pie-chart
+    const arc = d3.arc()
+      .outerRadius(120)
+      .innerRadius(0);
+
+    var svg_pie = d3.select("#pie-chart")
+      .append("svg")
+        .attr("width", 600)
+        .attr("height", 600)
+      .append("g")
+        .attr("transform", 'translate(300, 150)');
+
+    let names = ["None", "D0", "D1", "D2", "D3", "D4"]
+
+    let color = d3.scaleOrdinal()
+        .domain(names)
+        .range(["#aaa", "#FFCCCC", "#FF9999", "#FF6666", "#FF3333", "#FF0000"])
+
+    var pie_data
+
+    // functions ****************************
+
+    // assert function
+    function assert(condition, message) {
+    if (!condition) {
+        throw new Error(message || "Assertion failed");
+        }
+    }
+
+
+    // show info about county on map
+    function handleMouseover(e, d) {
+    	let pixelArea = geoGenerator.area(d);
+    	let bounds = geoGenerator.bounds(d);
+    	let centroid = geoGenerator.centroid(d);
+    	let measure = geoGenerator.measure(d);
+
+    	d3.select('#content .info')
+    		.text(d.properties.COUNTY_NAME + ' (path.area = ' + pixelArea.toFixed(1) + ' path.measure = ' + measure.toFixed(1) + ')');
+
+    	d3.select('#content .bounding-box rect')
+    		.attr('x', bounds[0][0])
+    		.attr('y', bounds[0][1])
+    		.attr('width', bounds[1][0] - bounds[0][0])
+    		.attr('height', bounds[1][1] - bounds[0][1]);
+
+    	d3.select('#content .centroid')
+    		.style('display', 'inline')
+    		.attr('transform', 'translate(' + centroid + ')');
+    }
+
+
+    // update date-val
+    function update_date(days) {
+      let new_date = d3.timeDay.offset(start_date, days)
+      d3.select("#date-val").text(d3.timeFormat("%m/%d/%Y")(new_date));
+      //d3.select("#date").property("value", new_date);
+      return new_date
+    }
+
+
+    // preprocess data
+    function preprocess(geojson, csvdata, csvdata_2) {
+
+      let parseDate = d3.timeParse("%Y/%m/%d")
+      let minDate = parseDate(csvdata[0]['StartDate'])
+      let maxDate = parseDate(csvdata[0]['EndDate'])
+      let begin = 0
+
+      // preprocess csvdata (map coloring)
+      for (var i in geojson.features) {
+        geojson.features[i].properties['StartDate'] = []
+        geojson.features[i].properties['EndDate'] = []
+        for (var j in csvdata) {
+          if (geojson.features[i].properties.COUNTY_NAME == csvdata[j].County) {  // mapping
+            for (var k in csvdata[j]){
+              if (k == 'County') {
+                continue
+              }
+              if (k == 'StartDate' || k == 'EndDate') {
+                let date = parseDate(csvdata[j][k])
+                geojson.features[i].properties[k].push(date)
+                minDate = d3.min([date, minDate])
+                maxDate = d3.max([date, maxDate])
+              } else {
+                geojson.features[i].properties[k] = Number(csvdata[j][k])
+              }
+            }
+          }
+        }
+        // console.log(geojson.features[i].properties)
+      }
+
+      start_date = minDate  // assignment of start_date
+
+      d3.select("#date")
+        .property("min", 0)
+        .property("max", d3.timeDay.count(minDate, maxDate))
+        .property("value", begin)
+
+      update_date(begin)
+
+      // preprocess csvdata_2 (pie chart)
+
+      for (var j in csvdata_2) {
+        for (var k in csvdata_2[j]){
+          if (k == 'StartDate' || k == 'EndDate') {
+            csvdata_2[j][k] = parseDate(csvdata_2[j][k])
+          }
+        }
+      }
+      // console.log(test)
+      pie_data = csvdata_2
+
+    }
+
+
+    // color the map; (start, end) is the endpoints of several time intervals, they are arraies ; now is a numeric
+    function color_map(start, end, now) {
+      assert(start.length == end.length, "unmatched in time intervals")
+      assert(start.length != 0, "time intervals are missing")
+      for (var i = 0; i<start.length; i++) {
+        if (now>=start[i] && now<=end[i]) {
+    		  return mark_D0;
+    	  }
+      }
+    	// return '#aaa';
+    }
+
+
+    // new proportion of pie chart given a new date
+    function new_prop(date) {
+
+      let new_prop = []
+
+      for (var j in pie_data) {
+        if (date >= pie_data[j]["StartDate"] && date <= pie_data[j]["EndDate"]) {
+          for (var k in pie_data[0]) {
+            if (names.some(function check(e){return e == k;})) {
+               new_prop.push({name: k, value: Number(pie_data[j][k])})
+            }
+          }
+          break
+        }
+      }
+
+      return new_prop
+    }
+
+
+    // update the pie-chart
+    function update_pie(new_date) {
+
+      data = new_prop(new_date)
+
+      var pie = d3.pie()
+        .value(function(d) {return d.value; })
+        .sort(function(a, b) { console.log(a) ; return d3.ascending(a.key, b.key);})
+        // This make sure that group order remains the same in the pie chart
+
+      svg_pie.selectAll("path")
+        .data(pie(data))
+        .join('path')
+          .transition()
+          .duration(200)
+          .attr('d', arc)
+          .attr("fill", d => color(d.data.name))
+          .attr("stroke", "black")
+          .style("stroke-width", "2px")
+          .style("opacity", 0.9)
+
+    }
+
+
+    // initialize everything
+    function update(geojson, csvdata, csvdata_2) {
+
+
+      preprocess(geojson, csvdata, csvdata_2);
+
+
+      // initialize map
+    	let u = d3.select('#content g.map')
+    		.selectAll('path')
+    		.data(geojson.features);
+
+    	u.enter()
+    		.append('path')
+    		.attr('d', geoGenerator)
+    		.style('fill', function(d) {
+    		  const start = d.properties["StartDate"];
+    		  const end = d.properties["EndDate"];
+    		  return color_map(start, end, start_date);
+    		  })
+    		.on('mouseover', handleMouseover);
+
+    	// add legend
+      u.selectAll("dots")
+        .data(["D0", "None"])
+        .enter()
+        .append("circle")
+          .attr("cx", 200)
+          .attr("cy", function(d,i){ return i*25 - 25})
+          .attr("r", 7)
+          .style("fill", d => color_1(d))
+
+      u.selectAll("labels")
+        .data(["D0", "None"])
+        .enter()
+        .append("text")
+          .attr("x", 220)
+          .attr("y", function(d,i){ return i*25 - 25})
+          .style("fill", d => color_1(de))
+          .text(function(d){ return d})
+          .attr("text-anchor", "left")
+          .style("alignment-baseline", "middle")
+
+
+    	// initialize pie chart
+    	let pie = d3.pie()
+      .sort(null)
+      .value(d => d.value);
+      let data_pie = new_prop(start_date)
+
+    	svg_pie.selectAll()
+        .data(pie(data_pie))
+        .join('path')
+          .attr('d', arc)
+          .attr("fill", d => color(d.data.name))
+          .attr("stroke", "black")
+          .style("stroke-width", "2px")
+          .style("opacity", 0.9)
+
+      // add legend
+      svg_pie.selectAll("dots")
+        .data(data_pie)
+        .enter()
+        .append("circle")
+          .attr("cx", 200)
+          .attr("cy", function(d,i){ return i*25 - 25})
+          .attr("r", 7)
+          .style("fill", d => color(d.name))
+
+      svg_pie.selectAll("labels")
+        .data(data_pie)
+        .enter()
+        .append("text")
+          .attr("x", 220)
+          .attr("y", function(d,i){ return i*25 - 25})
+          .style("fill", d => color(d.name))
+          .text(function(d){ return d.name})
+          .attr("text-anchor", "left")
+          .style("alignment-baseline", "middle")
+    }
+
+
+    // update everything
+    d3.select("#date").on("input", function() {
+      let new_date = update_date(+this.value);
+      // update the map
+      d3.select('#content g.map')
+    		.selectAll('path')
+    		.style('fill', function(d) {
+    		  const start = d.properties["StartDate"];
+    		  const end = d.properties["EndDate"];
+    		  return color_map(start, end, new_date);
+    		})
+    	// update the pie chart
+    	update_pie(new_date)
+    })
+
+
+
+    // REQUEST DATA
+    Promise
+      .all([
+        d3.json("https://raw.githubusercontent.com/www1331/California_Drought-5702/main/data_d3graph/California_County_Boundaries.json"),
+        d3.csv("https://raw.githubusercontent.com/www1331/California_Drought-5702/main/data_d3graph/D0_date_county.csv"),  // map coloring
+        d3.csv("https://raw.githubusercontent.com/www1331/California_Drought-5702/main/data_d3graph/Drought_area_prop_CA.csv")  // pie chart
+      ])
+      .then(([geojson, csvdata, csvdata_2]) => {
+        update(geojson, csvdata, csvdata_2)
+      });
+
+
+    </script>
+
+  </body>
+
+</html>
