@@ -1,13 +1,107 @@
 # Interactive graph
 
+```{=html}
 <style>
   * {
     font-family: sans-serif;
   }
-</style> 
+  body {
+        font-family: "Helvetica Neue", Helvetica, sans-serif;
+        font-size: 14px;
+        color: #333;
+      }
+      
+      #content .info {
+        height: 20px;
+      }
+      
+      #content .map path {
+        fill: #aaa;
+        stroke: #fff;
+      }
+      
+      #content .bounding-box rect {
+        fill: none;
+        stroke: #333;
+        stroke-dasharray: 2,1;
+      }
+      
+      #content .centroid {
+        display: none;
+      }
+      
+      #content .centroid circle {
+        fill: red;
+      }
+      
+      p,
+      label {
+        font:
+          1rem 'Fira Sans',
+          sans-serif;
+      }
+      
+      input[type=range] {
+        width: 90%;
+        margin: 0.4rem;
+      }
+      
+      #pie-chart .legend rect {
+       fill:white;
+       stroke:black;
+       opacity:0.8; 
+      }
+      
+</style>
+```
+::: {#plot}
+\<p\>
 
-<div id="plot">
-</div>
+Date: \<span id="date-val"\>\</span\>
 
-<script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
-<script src="scripts/myscript.js"></script>
+\<div\>
+
+\<input type="range" id="date" name="date" step="1"\>
+
+\</div\>
+
+\</p\>
+
+\<h2 style="font-family: Palatino;"\> Counties affected by drought of intensity D0. \</h2\>
+
+\<div id="content"\>
+
+\<div class="info"\>Hover over a county\</div\>
+
+\<svg width="600px" height="500px"\>
+
+\<g class="map"\>\</g\>
+
+\<g class="bounding-box"\>\<rect\>\</rect\>\</g\>
+
+\<g class="centroid"\>\<circle r="4"\>\</circle\>\</g\>
+
+\</svg\>
+
+\</div\>
+
+\<h2 style="font-family: Palatino;"\> Proportion of area affected by different degrees of drought. \</h2\>
+
+\<div id="pie-chart"\>
+
+\</div\>
+:::
+
+```{=html}
+<script src="https://d3js.org/d3.v7.js"></script>
+```
+```{=html}
+<script src="https://d3js.org/d3-array.v1.min.js"></script>
+```
+``` html
+<script src="https://d3js.org/d3-geo.v1.min.js"></script>
+```
+
+``` html
+<script src="https://github.com/www1331/California_Drought-5702/blob/main/scripts/myscript.js"></script>
+```
