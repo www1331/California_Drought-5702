@@ -103,5 +103,5 @@ Date: \<span id="date-val"\>\</span\>
 ```
 
 ``` html
-<script src="https://github.com/www1331/California_Drought-5702/blob/main/scripts/myscript.js"></script>
+<script src="https://raw.githubusercontent.com/www1331/California_Drought-5702/main/scripts/myscript.js"></script>
 ```
