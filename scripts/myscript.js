@@ -295,9 +295,9 @@
     // REQUEST DATA
     Promise
       .all([
-        d3.json("http://192.168.1.65:8080/California_County_Boundaries.json"),
-        d3.csv("http://192.168.1.65:8080/D0_date_county.csv"),  // map coloring
-        d3.csv("http://192.168.1.65:8080/Drought_area_prop_CA.csv")  // pie chart
+        d3.json("https://raw.githubusercontent.com/www1331/California_Drought-5702/main/data_d3graph/California_County_Boundaries.json"),
+        d3.csv("https://raw.githubusercontent.com/www1331/California_Drought-5702/main/data_d3graph/D0_date_county.csv"),  // map coloring
+        d3.csv("https://raw.githubusercontent.com/www1331/California_Drought-5702/main/data_d3graph/Drought_area_prop_CA.csv")  // pie chart
       ])
       .then(([geojson, csvdata, csvdata_2]) => {
         update(geojson, csvdata, csvdata_2)
