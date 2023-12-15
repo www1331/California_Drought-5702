@@ -54,42 +54,47 @@
       
 </style>
 ```
+```{=html}
+<p>
+
+  Date: <span id="date-val"></span>
+
+  <div>
+
+  <input type="range" id="date" name="date" step="1">
+
+  </div>
+
+</p>
+
+<h3 style="font-family: Palatino;"> Counties affected by drought of intensity D0. </h3>
+
+<div id="content">
+
+  <div class="info">Hover over a county</div>
+
+  <svg width="600px" height="500px">
+
+    <g class="map"></g>
+
+    <g class="bounding-box"><rect></rect></g>
+
+    <g class="centroid"><circle r="4"></circle></g>
+
+  </svg>
+
+</div>
+
+<h3 style="font-family: Palatino;"> Proportion of area affected by different degrees of drought. </h3>
+
+<div id="pie-chart">
+
+</div>
+```
 ::: {#plot}
-\<p\>
+<div>
 
-Date: \<span id="date-val"\>\</span\>
-
-\<div\>
-
-\<input type="range" id="date" name="date" step="1"\>
-
-\</div\>
-
-\</p\>
-
-\<h2 style="font-family: Palatino;"\> Counties affected by drought of intensity D0. \</h2\>
-
-\<div id="content"\>
-
-\<div class="info"\>Hover over a county\</div\>
-
-\<svg width="600px" height="500px"\>
-
-\<g class="map"\>\</g\>
-
-\<g class="bounding-box"\>\<rect\>\</rect\>\</g\>
-
-\<g class="centroid"\>\<circle r="4"\>\</circle\>\</g\>
-
-\</svg\>
-
-\</div\>
-
-\<h2 style="font-family: Palatino;"\> Proportion of area affected by different degrees of drought. \</h2\>
-
-\<div id="pie-chart"\>
-
-\</div\>
+</div>
 :::
 
 ```{=html}
@@ -98,10 +103,9 @@ Date: \<span id="date-val"\>\</span\>
 ```{=html}
 <script src="https://d3js.org/d3-array.v1.min.js"></script>
 ```
-``` html
+```{=html}
 <script src="https://d3js.org/d3-geo.v1.min.js"></script>
 ```
-
-``` html
-<script src="https://raw.githubusercontent.com/www1331/California_Drought-5702/main/scripts/myscript.js"></script>
+```{=html}
+<script src="scripts/myscript.js"></script>
 ```
