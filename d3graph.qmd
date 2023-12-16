@@ -94,7 +94,11 @@
 ::: {#plot}
 <div>
 
+If svgs fail to load, click on this link to view.
+
 </div>
+
+<a href="https://raw.githack.com/www1331/California_Drought-5702/main/Interactive%20Graph.html"> Interactive Graph.html</a>
 :::
 
 ```{=html}
